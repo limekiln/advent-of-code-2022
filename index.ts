@@ -2,8 +2,10 @@ import path from "path";
 import { getCaloriesSums } from "./util/calories";
 import { getRoundScore } from "./util/rockPaperScissosrs";
 import {
+  buildGroups,
   findCommonItems,
   getCharPrio,
+  getPrioSum,
   getRucksacks,
   splitRucksack,
 } from "./util/rucksacks";
@@ -56,12 +58,12 @@ if (!currentDay || currentDay === "3") {
   const rucksacks = getRucksacks(path.join(INPUT_PATH, "rucksacks.txt"));
   const compartments = rucksacks.map(splitRucksack);
   const commonItems = compartments.flatMap(findCommonItems);
-  const prioSum = commonItems.reduce((acc, curr) => {
-    acc += getCharPrio(curr);
-    return acc;
-  }, 0);
+  const prioSum = getPrioSum(commonItems);
   console.log(`The sum of priorities for the shared items is ${prioSum}`);
 
   // PART 2
-  // TBD
+  const elveGroups = buildGroups(rucksacks);
+  const badges = elveGroups.flatMap(findCommonItems);
+  const prioSumBadges = getPrioSum(badges);
+  console.log(`The sum of priorities for the badge items is ${prioSumBadges}`);
 }
