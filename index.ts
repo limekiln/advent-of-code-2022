@@ -1,5 +1,10 @@
 import path from "path";
 import { getCaloriesSums } from "./util/calories";
+import {
+  checkFullOverlap,
+  checkPartialOverlap,
+  getCleaningPairs,
+} from "./util/cleaning";
 import { getRoundScore } from "./util/rockPaperScissosrs";
 import {
   buildGroups,
@@ -66,4 +71,26 @@ if (!currentDay || currentDay === "3") {
   const badges = elveGroups.flatMap(findCommonItems);
   const prioSumBadges = getPrioSum(badges);
   console.log(`The sum of priorities for the badge items is ${prioSumBadges}`);
+}
+
+// DAY 4
+// PART 1
+if (!currentDay || currentDay === "4") {
+  const elvePairs = getCleaningPairs(
+    path.join(INPUT_PATH, "cleaning_input.txt")
+  );
+  const numberOfFullOverlaps = elvePairs.reduce((acc, curr) => {
+    if (checkFullOverlap(curr[0], curr[1])) acc++;
+    return acc;
+  }, 0);
+  console.log(`There are ${numberOfFullOverlaps} pairs with full overlaps`);
+
+  // PART2
+  const numberOfPartialOverlaps = elvePairs.reduce((acc, curr) => {
+    if (checkPartialOverlap(curr[0], curr[1])) acc++;
+    return acc;
+  }, 0);
+  console.log(
+    `There are ${numberOfPartialOverlaps} pairs with partial overlaps`
+  );
 }
