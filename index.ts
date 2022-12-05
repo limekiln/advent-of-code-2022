@@ -1,3 +1,4 @@
+import { cloneDeep } from "lodash";
 import path from "path";
 import { getCalories, getCaloriesSums } from "./util/calories";
 import {
@@ -5,11 +6,16 @@ import {
   checkPartialOverlap,
   getCleaningPairs,
 } from "./util/cleaning";
+import {
+  executeInstruction,
+  executeInstructionBatched,
+  getFirstCrates,
+  getStackAndInstructions,
+} from "./util/crates";
 import { readInput } from "./util/fileHandling";
 import {
   getPlayingInstructions,
   getRoundScore,
-  ShapePairResults,
 } from "./util/rockPaperScissosrs";
 import {
   buildGroups,
@@ -98,4 +104,27 @@ if (!currentDay || currentDay === "4") {
   console.log(
     `There are ${numberOfPartialOverlaps} pairs with partial overlaps`
   );
+}
+
+// DAY 5
+// PART 1
+if (!currentDay || currentDay === "5") {
+  const [stack, instructions] = getStackAndInstructions(
+    readInput(path.join(INPUT_PATH, "crates_input.txt"))
+  );
+
+  const workingStackSerial = cloneDeep(stack);
+  instructions.forEach((instruction) => {
+    executeInstruction(workingStackSerial, instruction);
+  });
+  const passPhrase = getFirstCrates(workingStackSerial);
+  console.log(`The first crates will be ${passPhrase}`);
+
+  // PART 2
+  const workingStackBatched = cloneDeep(stack);
+  instructions.forEach((instruction) =>
+    executeInstructionBatched(workingStackBatched, instruction)
+  );
+  const batchedPassPhrase = getFirstCrates(workingStackBatched);
+  console.log(`The first crates will be ${batchedPassPhrase}`);
 }
