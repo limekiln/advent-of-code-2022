@@ -1,5 +1,3 @@
-import { readFileSync } from "fs";
-
 enum ShapePoints {
   "X" = 1,
   "Y" = 2,
@@ -18,7 +16,7 @@ enum NecessaryResult {
   "Z" = ResultPoints.WIN,
 }
 
-enum ShapePairResults {
+export enum ShapePairResults {
   "AX" = ResultPoints.DRAW,
   "AY" = ResultPoints.WIN,
   "AZ" = ResultPoints.LOOSE,
@@ -48,21 +46,26 @@ const resultsByShape = {
   },
 };
 
-export const getRoundScore = (inputPath: string, decrtypt: boolean) => {
-  const parsedContent = readFileSync(inputPath, "utf8")
-    .replaceAll(" ", "")
-    .split("\n") as Array<keyof typeof ShapePairResults>;
+export const getPlayingInstructions = (inputString: string) => {
+  return inputString.replaceAll(" ", "").split("\n") as Array<
+    keyof typeof ShapePairResults
+  >;
+};
 
+export const getRoundScore = (
+  inputData: Array<keyof typeof ShapePairResults>,
+  decrtypt: boolean
+) => {
   let roundResult = 0;
 
   if (!decrtypt) {
-    roundResult = parsedContent.reduce((acc, curr) => {
+    roundResult = inputData.reduce((acc, curr) => {
       acc += ShapePairResults[curr];
       acc += ShapePoints[curr.at(1) as keyof typeof ShapePoints];
       return acc;
     }, 0);
   } else {
-    roundResult = parsedContent.reduce((acc, curr) => {
+    roundResult = inputData.reduce((acc, curr) => {
       acc += NecessaryResult[curr.at(1) as keyof typeof NecessaryResult];
       acc +=
         resultsByShape[curr.at(0) as "A" | "B" | "C"][

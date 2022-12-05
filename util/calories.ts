@@ -1,12 +1,12 @@
-import { readFileSync } from "fs";
-
-export const getCaloriesSums = (inputPath: string) => {
-  const parsedContent = readFileSync(inputPath, "utf8")
+export const getCalories = (inputString: string) => {
+  return inputString
     .replaceAll("\r", "")
     .split("\n")
     .map((x) => parseInt(x));
+};
 
-  const calorieSums = parsedContent.reduce(
+export const getCaloriesSums = (inputData: number[]) => {
+  const calorieSums = inputData.reduce(
     (acc, curr) => {
       if (!Number.isNaN(curr)) {
         acc.tmp += curr;

@@ -1,15 +1,19 @@
 import path from "path";
-import { getCaloriesSums } from "./util/calories";
+import { getCalories, getCaloriesSums } from "./util/calories";
 import {
   checkFullOverlap,
   checkPartialOverlap,
   getCleaningPairs,
 } from "./util/cleaning";
-import { getRoundScore } from "./util/rockPaperScissosrs";
+import { readInput } from "./util/fileHandling";
+import {
+  getPlayingInstructions,
+  getRoundScore,
+  ShapePairResults,
+} from "./util/rockPaperScissosrs";
 import {
   buildGroups,
   findCommonItems,
-  getCharPrio,
   getPrioSum,
   getRucksacks,
   splitRucksack,
@@ -21,9 +25,10 @@ const INPUT_PATH = path.join(".", "inputs");
 // DAY 1
 if (!currentDay || currentDay === "1") {
   // PART 1
-  const caloriesSums = getCaloriesSums(
-    path.join(INPUT_PATH, "calorie_input.txt")
+  const calories = getCalories(
+    readInput(path.join(INPUT_PATH, "calorie_input.txt"))
   );
+  const caloriesSums = getCaloriesSums(calories);
   const maxCalories = Math.max(...caloriesSums);
   console.log(`Elves with most snacks carries ${maxCalories} calories!`);
 
@@ -43,24 +48,24 @@ if (!currentDay || currentDay === "1") {
 // DAY 2
 // PART 1
 if (!currentDay || currentDay === "2") {
-  const roundResult = getRoundScore(
-    path.join(INPUT_PATH, "rock_paper_scissors_input.txt"),
-    false
+  const playingInstructions = getPlayingInstructions(
+    readInput(path.join(INPUT_PATH, "rock_paper_scissors_input.txt"))
   );
+
+  const roundResult = getRoundScore(playingInstructions, false);
   console.log(`The score of the round is ${roundResult}`);
 
   // PART 2
-  const realRoundResult = getRoundScore(
-    path.join(".", "inputs", "rock_paper_scissors_input.txt"),
-    true
-  );
+  const realRoundResult = getRoundScore(playingInstructions, true);
   console.log(`The real score of the round is ${realRoundResult}`);
 }
 
 // DAY 3
 // PART 1
 if (!currentDay || currentDay === "3") {
-  const rucksacks = getRucksacks(path.join(INPUT_PATH, "rucksacks.txt"));
+  const rucksacks = getRucksacks(
+    readInput(path.join(INPUT_PATH, "rucksacks.txt"))
+  );
   const compartments = rucksacks.map(splitRucksack);
   const commonItems = compartments.flatMap(findCommonItems);
   const prioSum = getPrioSum(commonItems);

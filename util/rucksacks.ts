@@ -40,8 +40,8 @@ export const findCommonItems = (items: string[][]) => {
   ];
 };
 
-export const getRucksacks = (inputPath: string) => {
-  return readFileSync(inputPath, "utf8").split("\n");
+export const getRucksacks = (inputString: string) => {
+  return inputString.split("\n");
 };
 
 export const buildGroups = (rucksacks: string[]) =>
