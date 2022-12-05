@@ -44,22 +44,19 @@ export const getStackAndInstructions = (
   return [stack, instructions];
 };
 
-export const executeInstructionBatched = (
+export const executeInstruction = (
   stack: Stack,
-  instruction: Instruction
+  instruction: Instruction,
+  canMoveMultiple: boolean
 ) => {
   const itemsToMove = stack[instruction.from].splice(
     0,
     instruction.numberOfItems
   );
 
+  // If only one item could be moved at a time, reverse the order to reflect this
+  if (!canMoveMultiple) itemsToMove.reverse();
   stack[instruction.to].unshift(...itemsToMove);
-};
-
-export const executeInstruction = (stack: Stack, instruction: Instruction) => {
-  for (let x = 0; x < instruction.numberOfItems; ++x) {
-    stack[instruction.to].unshift(...stack[instruction.from].splice(0, 1));
-  }
 };
 
 export const getFirstCrates = (stack: Stack) =>

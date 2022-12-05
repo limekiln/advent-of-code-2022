@@ -1,5 +1,6 @@
 import { cloneDeep } from "lodash";
 import path from "path";
+
 import { getCalories, getCaloriesSums } from "./util/calories";
 import {
   checkFullOverlap,
@@ -8,7 +9,6 @@ import {
 } from "./util/cleaning";
 import {
   executeInstruction,
-  executeInstructionBatched,
   getFirstCrates,
   getStackAndInstructions,
 } from "./util/crates";
@@ -127,7 +127,7 @@ if (!currentDay || currentDay === "5") {
 
   const workingStackSerial = cloneDeep(stack);
   instructions.forEach((instruction) => {
-    executeInstruction(workingStackSerial, instruction);
+    executeInstruction(workingStackSerial, instruction, false);
   });
   const passPhrase = getFirstCrates(workingStackSerial);
   console.log(`The first crates will be ${passPhrase}`);
@@ -135,7 +135,7 @@ if (!currentDay || currentDay === "5") {
   // PART 2
   const workingStackBatched = cloneDeep(stack);
   instructions.forEach((instruction) =>
-    executeInstructionBatched(workingStackBatched, instruction)
+    executeInstruction(workingStackBatched, instruction, true)
   );
   const batchedPassPhrase = getFirstCrates(workingStackBatched);
   console.log(`The first crates will be ${batchedPassPhrase}`);
