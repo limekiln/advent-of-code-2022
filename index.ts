@@ -30,6 +30,7 @@ const INPUT_PATH = path.join(".", "inputs");
 
 // DAY 1
 if (!currentDay || currentDay === "1") {
+  console.log("--------- DAY 1 --------");
   // PART 1
   const calories = getCalories(
     readInput(path.join(INPUT_PATH, "calorie_input.txt"))
@@ -49,11 +50,13 @@ if (!currentDay || currentDay === "1") {
   console.log(
     `The top 3 elves carrie ${maxCaloriesExtended} calories in total!`
   );
+  console.log("\n");
 }
 
 // DAY 2
-// PART 1
 if (!currentDay || currentDay === "2") {
+  console.log("--------- DAY 2 --------");
+  // PART 1
   const playingInstructions = getPlayingInstructions(
     readInput(path.join(INPUT_PATH, "rock_paper_scissors_input.txt"))
   );
@@ -64,11 +67,14 @@ if (!currentDay || currentDay === "2") {
   // PART 2
   const realRoundResult = getRoundScore(playingInstructions, true);
   console.log(`The real score of the round is ${realRoundResult}`);
+
+  console.log("\n");
 }
 
 // DAY 3
-// PART 1
 if (!currentDay || currentDay === "3") {
+  console.log("--------- DAY 3 --------");
+  // PART 1
   const rucksacks = getRucksacks(
     readInput(path.join(INPUT_PATH, "rucksacks.txt"))
   );
@@ -82,11 +88,14 @@ if (!currentDay || currentDay === "3") {
   const badges = elveGroups.flatMap(findCommonItems);
   const prioSumBadges = getPrioSum(badges);
   console.log(`The sum of priorities for the badge items is ${prioSumBadges}`);
+
+  console.log("\n");
 }
 
 // DAY 4
-// PART 1
 if (!currentDay || currentDay === "4") {
+  console.log("--------- DAY 4 --------");
+  // PART 1
   const elvePairs = getCleaningPairs(
     path.join(INPUT_PATH, "cleaning_input.txt")
   );
@@ -104,11 +113,14 @@ if (!currentDay || currentDay === "4") {
   console.log(
     `There are ${numberOfPartialOverlaps} pairs with partial overlaps`
   );
+
+  console.log("\n");
 }
 
 // DAY 5
-// PART 1
 if (!currentDay || currentDay === "5") {
+  console.log("--------- DAY 5 --------");
+  // PART 1
   const [stack, instructions] = getStackAndInstructions(
     readInput(path.join(INPUT_PATH, "crates_input.txt"))
   );
@@ -127,4 +139,6 @@ if (!currentDay || currentDay === "5") {
   );
   const batchedPassPhrase = getFirstCrates(workingStackBatched);
   console.log(`The first crates will be ${batchedPassPhrase}`);
+
+  console.log("\n");
 }
