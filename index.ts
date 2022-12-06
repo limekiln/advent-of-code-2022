@@ -8,6 +8,11 @@ import {
   getCleaningPairs,
 } from "./util/cleaning";
 import {
+  checkIfFlag,
+  convertStringToArray,
+  getSignalWindow,
+} from "./util/communication";
+import {
   executeInstruction,
   getFirstCrates,
   getStackAndInstructions,
@@ -141,4 +146,30 @@ if (!currentDay || currentDay === "5") {
   console.log(`The first crates will be ${batchedPassPhrase}`);
 
   console.log("\n");
+}
+
+// DAY 6
+if (!currentDay || currentDay === "6") {
+  console.log("--------- DAY 6 --------");
+  // PART 1
+  const message = convertStringToArray(
+    readInput(path.join(INPUT_PATH, "communication_input.txt"))
+  );
+  const windowStartIndex = message.findIndex((_char, idx) => {
+    const window = getSignalWindow(message, idx);
+    return checkIfFlag(window);
+  });
+  const numberOfSymbols = windowStartIndex + 4;
+  console.log(`Found first marker after character ${numberOfSymbols}`);
+
+  // PART 2
+  const filteredMessage = message.slice(numberOfSymbols);
+  const messageStartIndex = filteredMessage.findIndex((_char, idx) => {
+    const window = getSignalWindow(filteredMessage, idx, 14);
+    return checkIfFlag(window);
+  });
+  const numberOfMessageSymbols = messageStartIndex + 14 + numberOfSymbols;
+  console.log(
+    `Found first message marker after character ${numberOfMessageSymbols}`
+  );
 }
