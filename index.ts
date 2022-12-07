@@ -1,4 +1,4 @@
-import { cloneDeep } from "lodash";
+import { cloneDeep, sortBy } from "lodash";
 import path from "path";
 
 import { getCalories, getCaloriesSums } from "./util/calories";
@@ -18,6 +18,11 @@ import {
   getStackAndInstructions,
 } from "./util/crates";
 import { readInput } from "./util/fileHandling";
+import {
+  convertStringsToArray,
+  DirTree,
+  parseTerminalLine,
+} from "./util/fileSystem";
 import {
   getPlayingInstructions,
   getRoundScore,
@@ -172,4 +177,57 @@ if (!currentDay || currentDay === "6") {
   console.log(
     `Found first message marker after character ${numberOfMessageSymbols}`
   );
+
+  console.log("\n");
+}
+
+// DAY 7
+if (!currentDay || currentDay === "7") {
+  console.log("--------- DAY 7 --------");
+  // PART 1
+  const instructions = convertStringsToArray(
+    readInput(path.join(INPUT_PATH, "file_system_input.txt"))
+  );
+
+  const fileSystem = new DirTree();
+
+  instructions.forEach((instruction) => {
+    const parsedInstruction = parseTerminalLine(instruction);
+    if (
+      parsedInstruction.type === "COMMAND" &&
+      parsedInstruction.directive === "cd"
+    ) {
+      fileSystem.changeDir(parsedInstruction.args);
+    } else if (parsedInstruction.type === "FILE") {
+      fileSystem.addFile(parsedInstruction.name!, parsedInstruction.size!);
+    } else if (parsedInstruction.type === "DIRECTORY") {
+      fileSystem.addDir(parsedInstruction.name!);
+    }
+  });
+
+  fileSystem.calculateDirSizes();
+  const smallDirs = fileSystem.filterNodes((node) => node.size <= 100000);
+  const sumSmallDirs = smallDirs.reduce((acc, curr) => {
+    acc += curr.size;
+    return acc;
+  }, 0);
+  console.log(`The sum of the small directories is ${sumSmallDirs}`);
+
+  // PART 2
+  const DISK_SPACE_TOTAL = 70000000;
+  const DISK_SPACE_NECESSARY = 30000000;
+
+  const usedDiskSpace = fileSystem.root?.size ?? 0;
+  const freeDiskSpace = DISK_SPACE_TOTAL - usedDiskSpace;
+  const missingDiskSpace = DISK_SPACE_NECESSARY - freeDiskSpace;
+
+  const deletionCandidates = sortBy(
+    fileSystem.filterNodes((node) => node.size >= missingDiskSpace),
+    ["size"]
+  );
+  console.log(
+    `Directory ${deletionCandidates[0].name} has to be deleted to free up ${deletionCandidates[0].size} units`
+  );
+
+  console.log("\n");
 }
