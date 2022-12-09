@@ -34,6 +34,12 @@ import {
   getRucksacks,
   splitRucksack,
 } from "./util/rucksacks";
+import {
+  buildForest,
+  getSceneScore,
+  isTreeVisible,
+  processTrees,
+} from "./util/treeHouse";
 
 const currentDay: string | undefined = process.argv[2];
 const INPUT_PATH = path.join(".", "inputs");
@@ -227,6 +233,38 @@ if (!currentDay || currentDay === "7") {
   );
   console.log(
     `Directory ${deletionCandidates[0].name} has to be deleted to free up ${deletionCandidates[0].size} units`
+  );
+
+  console.log("\n");
+}
+
+// DAY 8
+if (!currentDay || currentDay === "8") {
+  console.log("--------- DAY 8 --------");
+  // PART 1
+  const forest = buildForest(
+    readInput(path.join(INPUT_PATH, "trees_input.txt"))
+  );
+
+  processTrees(forest);
+
+  let numberOfVisibleTrees = 0;
+  forest.forEach((treeRow) =>
+    treeRow.forEach((tree) => {
+      if (isTreeVisible(tree)) {
+        ++numberOfVisibleTrees;
+      }
+    })
+  );
+  console.log(`There are ${numberOfVisibleTrees} visible trees in the forest`);
+
+  // PART 2
+  const highestSceneScore = Math.max(
+    ...forest.flatMap((treeRow) => treeRow.map(getSceneScore))
+  );
+
+  console.log(
+    `The most beautiful tree has a scene score of ${highestSceneScore}`
   );
 
   console.log("\n");
