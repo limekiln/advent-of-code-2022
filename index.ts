@@ -27,6 +27,7 @@ import {
   getPlayingInstructions,
   getRoundScore,
 } from "./util/rockPaperScissosrs";
+import { getRopeMoves, Knot } from "./util/rope";
 import {
   buildGroups,
   findCommonItems,
@@ -265,6 +266,48 @@ if (!currentDay || currentDay === "8") {
 
   console.log(
     `The most beautiful tree has a scene score of ${highestSceneScore}`
+  );
+
+  console.log("\n");
+}
+
+// DAY 9
+if (!currentDay || currentDay === "9") {
+  console.log("--------- DAY 9 --------");
+  // PART 1
+  const ropeMoves = getRopeMoves(
+    readInput(path.join(INPUT_PATH, "rope_input.txt"))
+  );
+
+  const tail = new Knot("T");
+  const head = new Knot("H", tail);
+
+  ropeMoves.forEach((move) => {
+    head.move(move);
+  });
+
+  console.log(
+    `The tail did visit ${tail.visitedPositions.length} locations at least once`
+  );
+
+  // PART 2
+  const knot9 = new Knot("9");
+  const knot8 = new Knot("8", knot9);
+  const knot7 = new Knot("7", knot8);
+  const knot6 = new Knot("6", knot7);
+  const knot5 = new Knot("5", knot6);
+  const knot4 = new Knot("4", knot5);
+  const knot3 = new Knot("3", knot4);
+  const knot2 = new Knot("2", knot3);
+  const knot1 = new Knot("1", knot2);
+  const head2 = new Knot("H", knot1);
+
+  ropeMoves.forEach((move) => {
+    head2.move(move);
+  });
+
+  console.log(
+    `The long rope tail did visit ${knot9.visitedPositions.length} locations at least once`
   );
 
   console.log("\n");
