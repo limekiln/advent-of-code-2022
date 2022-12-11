@@ -12,6 +12,7 @@ import {
   convertStringToArray,
   getSignalWindow,
 } from "./util/communication";
+import { ComDevice, readInstructions } from "./util/cpu";
 import {
   executeInstruction,
   getFirstCrates,
@@ -309,6 +310,33 @@ if (!currentDay || currentDay === "9") {
   console.log(
     `The long rope tail did visit ${knot9.visitedPositions.length} locations at least once`
   );
+
+  console.log("\n");
+}
+
+// DAY 10
+if (!currentDay || currentDay === "10") {
+  console.log("--------- DAY 10 --------");
+  // PART 1
+  const instructions = readInstructions(
+    readInput(path.join(INPUT_PATH, "cpu_instructions_input.txt"))
+  );
+
+  const device = new ComDevice(instructions);
+  let signalPowerSum = 0;
+  for (let cylce = 1; cylce <= 240; ++cylce) {
+    device.incrementCylce();
+    if ([20, 60, 100, 140, 180, 220].includes(cylce)) {
+      signalPowerSum += device.getSignalPower();
+    }
+  }
+
+  console.log(`The combined signal power is ${signalPowerSum}`);
+  console.log("\n");
+
+  // PART 2
+  console.log("The screen shows: ");
+  console.log(device.screen);
 
   console.log("\n");
 }
