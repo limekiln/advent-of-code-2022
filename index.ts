@@ -24,6 +24,7 @@ import {
   DirTree,
   parseTerminalLine,
 } from "./util/fileSystem";
+import { getMonkeysFromString, throwItem } from "./util/monkeys";
 import {
   getPlayingInstructions,
   getRoundScore,
@@ -337,6 +338,49 @@ if (!currentDay || currentDay === "10") {
   // PART 2
   console.log("The screen shows: ");
   console.log(device.screen);
+
+  console.log("\n");
+}
+
+// DAY 11
+if (!currentDay || currentDay === "11") {
+  console.log("--------- DAY 11 --------");
+  // PART 1
+  const monkeys = getMonkeysFromString(
+    readInput(path.join(INPUT_PATH, "monkeys_input.txt"))
+  ).map((monkey) => ({
+    monkey,
+    numberOfInspections: 0,
+  }));
+
+  // Play the game for 20 rounds
+  for (let x = 0; x < 20; ++x) {
+    // Let each monkey have their turn
+    monkeys.forEach((monkey) => {
+      const currentMonkey = monkey.monkey;
+      const { items, inspectItem, getTargetMonkey } = currentMonkey;
+
+      // Let the monkey go through all items they have
+      while (items.length) {
+        // Inspect the item and update its worry level
+        items[0] = inspectItem(items[0]);
+        monkey.numberOfInspections++;
+
+        // Throw the item to the next monkey
+        const targetMonkey = monkeys.find(
+          (monkey) => monkey.monkey.name === getTargetMonkey(items[0])
+        )!.monkey;
+        throwItem(currentMonkey, targetMonkey);
+      }
+    });
+  }
+
+  const sortedMonkeys = sortBy(monkeys, (o) => o.numberOfInspections).reverse();
+  const monkeyBusiness =
+    sortedMonkeys[0].numberOfInspections * sortedMonkeys[1].numberOfInspections;
+  console.log(`The monkey business euqals ${monkeyBusiness}`);
+
+  // PART 2
 
   console.log("\n");
 }
