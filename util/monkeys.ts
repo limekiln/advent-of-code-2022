@@ -1,18 +1,3 @@
-// export class Monkey {
-//   constructor(
-//     private _name: string,
-//     private _items: number[],
-//     private _inspectItem: () => void,
-//     private _throwItem: () => void
-//   ){};
-
-//   private numberOfInspections = 0;
-
-//   public get name() {
-//     return this._name;
-//   }
-// }
-
 export type Monkey = {
   name: string;
   items: number[];
@@ -20,22 +5,33 @@ export type Monkey = {
   getTargetMonkey: (worryLevel: number) => string;
 };
 
-const getInspectItemFunction = (functionAsString: string) => {
+export const applySimpleCopingMechanism = (worryLevel: number) =>
+  worryLevel / 3;
+
+export const applyCopingMechanism = (lcm: number) => (worryLevel: number) =>
+  worryLevel % lcm;
+
+const getInspectItemFunction = (
+  functionAsString: string,
+  applyCopingMechanism: (worryLevel: number) => number
+) => {
   const interestingPart = functionAsString.split("old ")[1];
   const op = interestingPart.charAt(0);
   const opArg = interestingPart.split(" ")[1];
   if (op === "+") {
     if (opArg !== "old") {
-      return (x: number) => Math.floor((x + parseInt(opArg)) / 3);
+      return (x: number) =>
+        Math.floor(applyCopingMechanism(x + parseInt(opArg)));
     }
-    return (x: number) => Math.floor((x + x) / 3);
+    return (x: number) => Math.floor(applyCopingMechanism(x + x));
   }
 
   if (op === "*") {
     if (opArg !== "old") {
-      return (x: number) => Math.floor((x * parseInt(opArg)) / 3);
+      return (x: number) =>
+        Math.floor(applyCopingMechanism(x * parseInt(opArg)));
     }
-    return (x: number) => Math.floor((x * x) / 3);
+    return (x: number) => Math.floor(applyCopingMechanism(x * x));
   }
 
   return (x: number) => x;
@@ -50,7 +46,10 @@ const getThrowItemFunction = (input: string[]) => {
     x % modArg ? `monkey${monkeyIfNotDevisable}` : `monkey${monkeyIfDevisable}`;
 };
 
-const getMonkeyFromString = (monkeyAsArray: string[]): Monkey => {
+const getMonkeyFromString = (
+  monkeyAsArray: string[],
+  applyCopingMechanism: (worryLevel: number) => number
+): Monkey => {
   const name = monkeyAsArray[0]
     .split(":")[0]
     .toLocaleLowerCase()
@@ -59,7 +58,10 @@ const getMonkeyFromString = (monkeyAsArray: string[]): Monkey => {
     .split(": ")[1]
     .split(", ")
     .map((x) => parseInt(x));
-  const inspectItem = getInspectItemFunction(monkeyAsArray[2]);
+  const inspectItem = getInspectItemFunction(
+    monkeyAsArray[2],
+    applyCopingMechanism
+  );
   const getTargetMonkey = getThrowItemFunction([
     monkeyAsArray[3],
     monkeyAsArray[4],
@@ -69,11 +71,14 @@ const getMonkeyFromString = (monkeyAsArray: string[]): Monkey => {
   return { name, items, inspectItem, getTargetMonkey };
 };
 
-export const getMonkeysFromString = (multiMonkeyString: string) =>
+export const getMonkeysFromString = (
+  multiMonkeyString: string,
+  applyCopingMechanism: (worryLevel: number) => number
+) =>
   multiMonkeyString
     .split("\n\n")
     .map((x) => x.split("\n").map((x) => x.trim()))
-    .map(getMonkeyFromString);
+    .map((x) => getMonkeyFromString(x, applyCopingMechanism));
 
 export const throwItem = (from: Monkey, to: Monkey) => {
   to.items.push(from.items.shift()!);
