@@ -25,6 +25,11 @@ import {
   parseTerminalLine,
 } from "./util/fileSystem";
 import {
+  getPossibleStartingPositions,
+  parseElevationMap,
+  tryMove,
+} from "./util/hills";
+import {
   applyCopingMechanism,
   applySimpleCopingMechanism,
   getMonkeysFromString,
@@ -395,7 +400,7 @@ if (!currentDay || currentDay === "11") {
     numberOfInspections: 0,
   }));
 
-  // Play the game for 20 rounds
+  // Play the game for 10000 rounds
   for (let x = 0; x < 10000; ++x) {
     // Let each monkey have their turn
     monkeys2.forEach((monkey) => {
@@ -429,4 +434,56 @@ if (!currentDay || currentDay === "11") {
   );
 
   console.log("\n");
+}
+
+// DAY 12
+if (!currentDay || currentDay === "12") {
+  console.log("--------- DAY 12 --------");
+  // PART 1
+  const { elevationMap, startPosition, endPosition } = parseElevationMap(
+    readInput(path.join(INPUT_PATH, "hills_input.txt"))
+  );
+
+  const shortestPathMap = [...Array(elevationMap[0].length)].map((_) => [
+    ...Array(elevationMap[1].length),
+  ]);
+
+  const globalMinimum = [Number.MAX_SAFE_INTEGER];
+
+  (["^", ">", "v", "<"] as const).forEach((direction) => {
+    tryMove(
+      startPosition,
+      direction,
+      elevationMap,
+      shortestPathMap,
+      endPosition,
+      globalMinimum
+    );
+  });
+
+  console.log(
+    `The shortest way from the start to the end takes ${globalMinimum[0]} steps`
+  );
+
+  // PART 2
+  const possibleStartingPositions = getPossibleStartingPositions(elevationMap);
+  possibleStartingPositions.forEach((startingPosition) => {
+    (["^", ">", "v", "<"] as const).forEach((direction) => {
+      const newShortestPathMap = [...Array(elevationMap[0].length)].map((_) => [
+        ...Array(elevationMap[1].length),
+      ]);
+      tryMove(
+        startingPosition,
+        direction,
+        elevationMap,
+        newShortestPathMap,
+        endPosition,
+        globalMinimum
+      );
+    });
+  });
+
+  console.log(
+    `The shortest way from any start to the end takes ${globalMinimum[0]} steps`
+  );
 }
