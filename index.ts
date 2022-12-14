@@ -1,4 +1,4 @@
-import { cloneDeep, sortBy } from "lodash";
+import { cloneDeep, isEqual, sortBy } from "lodash";
 import path from "path";
 
 import { getCalories, getCaloriesSums } from "./util/calories";
@@ -18,6 +18,7 @@ import {
   getFirstCrates,
   getStackAndInstructions,
 } from "./util/crates";
+import { getPackagePairs, hasCorrectOrder } from "./util/distressSignal";
 import { readInput } from "./util/fileHandling";
 import {
   convertStringsToArray,
@@ -486,4 +487,51 @@ if (!currentDay || currentDay === "12") {
   console.log(
     `The shortest way from any start to the end takes ${globalMinimum[0]} steps`
   );
+
+  console.log("\n");
+}
+
+// DAY 13
+if (!currentDay || currentDay === "13") {
+  console.log("--------- DAY 13 --------");
+  // PART 1
+  const packagePairs = getPackagePairs(
+    readInput(path.join(INPUT_PATH, "distress_input.txt"))
+  );
+
+  let correctIndexSum = 0;
+  packagePairs.forEach((packagePair, idx) => {
+    if (hasCorrectOrder(packagePair)) {
+      correctIndexSum += idx + 1;
+    } else {
+    }
+  });
+
+  console.log(`The sum of correct index values is ${correctIndexSum}`);
+
+  // PART 2
+  const startDriverPackage = [[2]];
+  const endDriverPackage = [[6]];
+  const injectedPackages = [
+    ...packagePairs.flatMap((x) => [x.left, x.right]),
+    startDriverPackage,
+    endDriverPackage,
+  ].sort((a, b) => {
+    const isCorrectOrder = hasCorrectOrder({ left: a, right: b });
+    if (isCorrectOrder === true) return -1;
+    else if (isCorrectOrder === false) return 1;
+    else return 0;
+  });
+
+  const startDriverIndex =
+    injectedPackages.findIndex((x) => x === startDriverPackage) + 1;
+  const endDriverIndex =
+    injectedPackages.findIndex((x) => x === endDriverPackage) + 1;
+  const decoderKey = startDriverIndex * endDriverIndex;
+
+  console.log(
+    `The product of the driver package index values is ${decoderKey}`
+  );
+
+  console.log("\n");
 }
