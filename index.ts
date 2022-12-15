@@ -1,7 +1,8 @@
-import { cloneDeep, sortBy } from "lodash";
+import { cloneDeep, sortBy, sortedIndex, sortedIndexBy } from "lodash";
 import path from "path";
 
 import { getCalories, getCaloriesSums } from "./util/calories";
+import { addSandToRocks, parseCaveScan, simulateSandFall } from "./util/cave";
 import {
   checkFullOverlap,
   checkPartialOverlap,
@@ -540,4 +541,50 @@ if (!currentDay || currentDay === "13") {
 if (!currentDay || currentDay === "14") {
   console.log("--------- DAY 14 --------");
   // PART 1
+  const rocks = parseCaveScan(
+    readInput(path.join(INPUT_PATH, "cave_input.txt"))
+  );
+
+  let somethingFell = false;
+  let numberOfSand = 0;
+
+  while (!somethingFell) {
+    const sandFinalPosition = simulateSandFall(rocks);
+    if (sandFinalPosition) {
+      ++numberOfSand;
+      addSandToRocks(sandFinalPosition, rocks);
+    } else {
+      somethingFell = true;
+    }
+  }
+
+  console.log(
+    `${numberOfSand} units of sand come to rest before falling into the void`
+  );
+
+  // PART 2
+  const rocks2 = parseCaveScan(
+    readInput(path.join(INPUT_PATH, "cave_input.txt"))
+  );
+
+  numberOfSand = 0;
+  const groundLevel = rocks2.at(-1)!.y + 2;
+  while (true) {
+    const sandFinalPosition = simulateSandFall(rocks2, groundLevel);
+    if (sandFinalPosition) {
+      ++numberOfSand;
+      addSandToRocks(sandFinalPosition, rocks2);
+      if (sandFinalPosition.x === 500 && sandFinalPosition.y === 0) {
+        break;
+      }
+    } else {
+      throw new Error("Sand should not fall into the void here?!");
+    }
+  }
+
+  console.log(
+    `${numberOfSand} units of sand come to rest before blocking the source`
+  );
+
+  console.log("\n");
 }
