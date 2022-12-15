@@ -1,4 +1,4 @@
-import { cloneDeep, isEqual, sortBy } from "lodash";
+import { cloneDeep, sortBy } from "lodash";
 import path from "path";
 
 import { getCalories, getCaloriesSums } from "./util/calories";
@@ -534,4 +534,10 @@ if (!currentDay || currentDay === "13") {
   );
 
   console.log("\n");
+}
+
+// DAY 14
+if (!currentDay || currentDay === "14") {
+  console.log("--------- DAY 14 --------");
+  // PART 1
 }

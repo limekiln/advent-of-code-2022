@@ -1,15 +1,4 @@
-export type File = {
-  name: string;
-  size: number;
-};
-
-export type Directory = {
-  name: string;
-  parent: Directory | null;
-  size: number;
-  files: File[];
-  directories: Directory[];
-};
+import { Directory } from "./types";
 
 export const convertStringsToArray = (inputString: string) =>
   inputString.split("\n");

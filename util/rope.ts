@@ -1,14 +1,4 @@
-export type Position = {
-  x: number;
-  y: number;
-};
-
-export type Direction = "U" | "D" | "L" | "R" | "UR" | "UL" | "DR" | "DL";
-
-export type Movement = {
-  direction: Direction;
-  numberOfSteps: number;
-};
+import { Direction, Movement, Position } from "./types";
 
 export const getRopeMoves = (inputString: string) => {
   return inputString.split("\n").map((moveString) => {

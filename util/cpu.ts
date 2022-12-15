@@ -1,13 +1,4 @@
-type Instruction = {
-  opCode: "noop" | "addx";
-  numberOfCycles: 1 | 2;
-  argument?: number;
-};
-
-type InstructionBuffer = {
-  instruction: Instruction;
-  finishesAtCycle: number;
-};
+import { Instruction, InstructionBuffer } from "./types";
 
 const getInstruction = (instruction: string): Instruction => {
   const rawInstruction = instruction.split(" ");

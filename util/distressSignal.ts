@@ -1,9 +1,4 @@
-import { result } from "lodash";
-
-type PackagePair = {
-  left: any[];
-  right: any[];
-};
+import { PackagePair } from "./types";
 
 const findClosingBracketIndex = (input: string) => {
   if (!input.startsWith("[")) {

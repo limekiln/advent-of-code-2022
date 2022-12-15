@@ -1,12 +1,4 @@
-type Stack = {
-  [key: number]: string[];
-};
-
-type Instruction = {
-  from: number;
-  to: number;
-  numberOfItems: number;
-};
+import { CrateMovement, CrateStack } from "./types";
 
 const convertInstructionArrayToObject = (instructionString: string) => {
   const instruction = instructionString.split(" ");
@@ -19,7 +11,7 @@ const convertInstructionArrayToObject = (instructionString: string) => {
 
 export const getStackAndInstructions = (
   inputString: string
-): [stack: Stack, instructions: Instruction[]] => {
+): [stack: CrateStack, instructions: CrateMovement[]] => {
   const [stackString, instructionsString] = inputString.split("\n\n");
   const stack = stackString
     .replaceAll(/\[|\]/g, "")
@@ -35,7 +27,7 @@ export const getStackAndInstructions = (
         }
       });
       return acc;
-    }, {} as Stack);
+    }, {} as CrateStack);
 
   const instructions = instructionsString
     .split("\n")
@@ -45,8 +37,8 @@ export const getStackAndInstructions = (
 };
 
 export const executeInstruction = (
-  stack: Stack,
-  instruction: Instruction,
+  stack: CrateStack,
+  instruction: CrateMovement,
   canMoveMultiple: boolean
 ) => {
   const itemsToMove = stack[instruction.from].splice(
@@ -59,7 +51,7 @@ export const executeInstruction = (
   stack[instruction.to].unshift(...itemsToMove);
 };
 
-export const getFirstCrates = (stack: Stack) =>
+export const getFirstCrates = (stack: CrateStack) =>
   Object.values(stack)
     .map((staple) => staple[0])
     .join("");

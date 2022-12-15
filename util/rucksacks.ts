@@ -1,5 +1,3 @@
-import { readFileSync } from "fs";
-
 const checkUpperCase = (char: string) => char.toUpperCase() === char;
 
 export const getCharPrio = (char: string) => {

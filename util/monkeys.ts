@@ -1,9 +1,4 @@
-export type Monkey = {
-  name: string;
-  items: number[];
-  inspectItem: (worryLevel: number) => number;
-  getTargetMonkey: (worryLevel: number) => string;
-};
+import { Monkey } from "./types";
 
 export const applySimpleCopingMechanism = (worryLevel: number) =>
   worryLevel / 3;

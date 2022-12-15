@@ -1,8 +1,10 @@
+import { Position } from "./types";
+
 export type TreePosition = [number, number];
 
 export type Tree = {
   height: number;
-  position: TreePosition;
+  position: Position;
   isVisibleFrom: Record<Direction, boolean>;
   viewingDistance: Record<Direction, number>;
 };
@@ -16,7 +18,7 @@ export enum Direction {
   BOTTOM = "BOTTOM",
 }
 
-const plantTree = (height: number, position: TreePosition): Tree => ({
+const plantTree = (height: number, position: Position): Tree => ({
   height,
   position,
   isVisibleFrom: {
@@ -41,7 +43,7 @@ export const buildForest = (inputString: string) => {
       treeRow
         .split("")
         .map((treeHeight, colIdx) =>
-          plantTree(parseInt(treeHeight), [rowIdx, colIdx])
+          plantTree(parseInt(treeHeight), { x: rowIdx, y: colIdx })
         )
     );
 };
@@ -83,18 +85,18 @@ export const extractTreeLine = (
 
 export const getAdjacentTrees = (tree: Tree, forest: Forest) => {
   // Extract current column
-  let treeLine = extractTreeLine(tree.position[1], "COL", forest);
+  let treeLine = extractTreeLine(tree.position.y, "COL", forest);
   // Get all trees above the current one
-  const treesAbove = treeLine.slice(0, tree.position[0]);
+  const treesAbove = treeLine.slice(0, tree.position.x);
   // Get all trees under the current one
-  const treesBelow = treeLine.slice(tree.position[0] + 1, treeLine.length);
+  const treesBelow = treeLine.slice(tree.position.x + 1, treeLine.length);
 
   // Extract current row
-  treeLine = extractTreeLine(tree.position[0], "ROW", forest);
+  treeLine = extractTreeLine(tree.position.x, "ROW", forest);
   // Get all trees above the current one
-  const treesLeft = treeLine.slice(0, tree.position[1]);
+  const treesLeft = treeLine.slice(0, tree.position.y);
   // Get all trees under the current one
-  const treesRight = treeLine.slice(tree.position[1] + 1, treeLine.length);
+  const treesRight = treeLine.slice(tree.position.y + 1, treeLine.length);
 
   return [treesAbove, treesBelow, treesLeft, treesRight] as const;
 };
